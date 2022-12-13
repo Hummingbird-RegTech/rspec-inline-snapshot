@@ -3,6 +3,7 @@ require File.expand_path('lib/rspec/inline_snapshot/version', __dir__)
 Gem::Specification.new do |s|
   s.name                  = 'rspec-inline-snapshot'
   s.version               = RSpec::InlineSnapshot::VERSION
+  s.homepage              = 'https://github.com/Hummingbird-RegTech/rspec-inline-snapshot'
   s.summary               = 'Inline snapshot expectations for RSpec'
   s.description           = 'Inline snapshot expectations for RSpec'
   s.authors               = ['Hummingbird RegTech, Inc.']
