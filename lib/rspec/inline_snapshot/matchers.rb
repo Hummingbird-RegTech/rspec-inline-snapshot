@@ -137,7 +137,7 @@ module RSpec
           #   https://medium.com/flippengineering/using-rubocop-ast-to-transform-ruby-files-using-abstract-syntax-trees-3e352e9ac916
           REWRITERS[source_file_path] ||= begin
             parsed_source = RuboCop::AST::ProcessedSource.from_file(source_file_path,
-                                                                    2.7)
+                                                                    RUBY_VERSION.match(/\d+\.\d+/).to_s.to_f)
             corrector = ::RuboCop::Cop::Corrector.new(parsed_source)
             [parsed_source, corrector]
           end
