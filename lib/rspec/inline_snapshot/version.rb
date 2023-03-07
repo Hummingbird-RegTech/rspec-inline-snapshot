@@ -13,6 +13,6 @@
 # limitations under the License.
 module RSpec
   module InlineSnapshot
-    VERSION = '1.0.0'.freeze
+    VERSION = '1.0.1'.freeze
   end
 end
