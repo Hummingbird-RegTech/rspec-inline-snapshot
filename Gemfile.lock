@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rspec-inline-snapshot (1.0.1)
+    rspec-inline-snapshot (1.0.2)
       rspec
       rubocop
       rubocop-ast

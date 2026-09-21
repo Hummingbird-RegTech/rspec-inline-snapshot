@@ -90,7 +90,7 @@ module RSpec
             indent = parsed_source.line_indentation(node.location.first_line)
             [
               '(<<~SNAP.chomp)',
-              actual.split("\n", -1).map { |line| "#{' ' * (indent + 2)}#{line}" },
+              escape_heredoc(actual).split("\n", -1).map { |line| "#{' ' * (indent + 2)}#{line}" },
               "#{' ' * indent}SNAP"
             ].join("\n")
           else
@@ -104,6 +104,12 @@ module RSpec
           raise ArgumentError,
                 "Cannot snapshot. Actual (#{actual.class}) is not a String and does not implement #as_json"
         end
+      end
+
+      # A squiggly heredoc is double-quoted, so backslashes and the interpolation
+      # sigils have to be escaped for the body to read back as the snapshotted text.
+      def escape_heredoc(value)
+        value.gsub('\\') { '\\\\' }.gsub(/#(?=[{$@])/) { '\#' }
       end
 
       def should_update_inline_snapshot?(expected)

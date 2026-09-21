@@ -151,6 +151,27 @@ RSpec.describe RSpec::InlineSnapshot::Matchers do
         end
       end
 
+      context 'new value contains backslashes or interpolation syntax' do
+        # A heredoc is double-quoted, so an unescaped backslash or #{} in the
+        # body would read back as something other than what we snapshotted.
+        let(:actual) { "a \\s b\n\#{not_interpolated}\nc \\\\ d\n\#@ivar and \#$gvar" }
+
+        it 'escapes them so the heredoc parses back to the original string' do
+          replacement = nil
+          allow(mock_corrector).to receive(:replace) { |_range, value| replacement = value }
+
+          expect(actual).to match_inline_snapshot
+
+          heredoc = parse_ruby("x#{replacement}").first_argument.receiver
+          expect(heredoc.children.map(&:type)).to all(eq(:str))
+          expect(heredoc.children.map(&:value).join.chomp).to eq(actual)
+        end
+
+        def parse_ruby(source)
+          RuboCop::AST::ProcessedSource.new(source, RUBY_VERSION.match(/\d+\.\d+/).to_s.to_f).ast
+        end
+      end
+
       context 'new value ends in a newline' do
         it 'updates the inline snapshot with a heredoc preserving the newline' do
           expect(mock_corrector).to receive(:replace).with(
